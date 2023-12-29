@@ -118,5 +118,5 @@ class HighScoringWords:
                 leaderboard.append(word)
         
         # Sort reversed leaderboard (descending) by word score then word string if scores are identical
-        leaderboard.sort(key= lambda word: (self.word_scores[word], word), reverse=True)
+        leaderboard.sort(key= lambda word: (-self.word_scores[word], word))
         return leaderboard
