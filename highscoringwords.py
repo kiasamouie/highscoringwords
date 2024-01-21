@@ -7,8 +7,8 @@ __author__ = 'kia'
 class HighScoringWords:
     MAX_LEADERBOARD_LENGTH = 100  # the maximum number of items that can appear in the leaderboard
     MIN_WORD_LENGTH = 3  # words must be at least this many characters long
-    letter_values = {}
     valid_words = []
+    letter_values = {}
 
     def __init__(self, validwords='wordlist.txt', lettervalues='letterValues.txt'):
         """
@@ -33,9 +33,7 @@ class HighScoringWords:
         Build a leaderboard of the top scoring MAX_LEADERBOAD_LENGTH words from the complete set of valid words.
         :return: The list of top words.
         """
-        # Build valid_words leaderboard if empty in order to populate self.word_scores
-        if not self.leaderboard:
-            self.leaderboard = self._build_leaderboard()
+        return self._build_leaderboard()
 
     def build_leaderboard_for_letters(self, starting_letters):
         """
@@ -51,33 +49,33 @@ class HighScoringWords:
             exit(f"Starting letters must be at least {self.MIN_WORD_LENGTH} characters long. Please try again!")
 
         matched_words = []
-        character_range = range(5,16)
         starting_letters = list(starting_letters)
+        # character_range = range(5,16)
 
         for word in self.valid_words:
             # Skip word when not betweeen 5-15 characters
             word_length = len(word)
-            if word_length not in character_range:
+            if word_length < 5 or word_length > 15:
                 continue
 
             count = 0
-            letters = list(word)
+            letters = word
             for l in starting_letters:
                 if l in letters:
                     # remove current letter from letters
-                    letters.pop(letters.index(l))
+                    letters = letters.replace(l, "", 1)
                     count+=1
+                    # starting_letters = 'testing' - words like 'gents', 'ingest', 'inset' will match
+                    if count == word_length:
+                        matched_words.append(word)
+                        break
 
-            # starting_letters = 'testing' - words like 'gents', 'ingest', 'inset' will match
-            if count == word_length:
-                matched_words.append(word)
-        
         # validate if matches were found
         if not matched_words:
-            exit("No matches found!")
+            raise ValueError("No matches found!")
 
-        self.build_leaderboard_for_word_list()
-
+        # self.build_leaderboard_for_word_list()
+            
         # Build leaderboard for matched_words given the user input starting_letters
         return self._build_leaderboard(words=matched_words, scores=self.word_scores)
     

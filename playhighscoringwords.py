@@ -9,6 +9,10 @@ def play_highscoringwords_game():
 
     # Build the leaderboard for the provided letters
     game = HighScoringWords()
+
+    # Build valid_words leaderboard in order to populate self.word_scores
+    game.leaderboard = game.build_leaderboard_for_word_list()
+
     starting_letters = input("Enter a string of letters... For example = 'testing':\n\n").lower()
     leaderboard = game.build_leaderboard_for_letters(starting_letters)
 
